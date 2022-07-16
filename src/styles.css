@@ -63,3 +63,21 @@ h1{
 #desc{
     text-transform: capitalize;
 }
+.weather-temperature img {
+    height: 50px;
+    width: 50px;
+  }
+#temperature{
+    font-weight: 600;
+    font-size: 24px;
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+  
+}
+#wheather-img{
+    padding: 0!important;
+}
+.preps{
+    padding-left: 5px!important;
+}

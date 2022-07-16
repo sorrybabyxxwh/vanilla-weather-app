@@ -60,6 +60,9 @@ function showTemperature(response) {
     windElement.innerHTML = `${wind} km/h`
     let currentDateElement = document.getElementById("date");
     currentDateElement.innerHTML = formattedDate(response.data.dt * 1000);
+    let iconElement = document.getElementById("icon");
+    iconElement.setAttribute("alt",response.data.weather[0].description);
+    iconElement.setAttribute("src",`http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`);
 }
 
 function displayCityName(response){
