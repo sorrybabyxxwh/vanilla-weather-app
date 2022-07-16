@@ -1,4 +1,4 @@
-
+let city = "Kiev";
 function formattedDate(timestamp) {
     let date = new Date(timestamp);
     let daylist = [
@@ -29,48 +29,47 @@ function formattedDate(timestamp) {
     let month = date.getMonth();
     return `${daylist[day]} ${dateNum} ${monthList[month]}`;
   }
-
-function search (event){
-    event.preventDefault();
-    let city = document.querySelector("#city-input").value;
-    let apiKey = '854e33f61b08418023d6baae98ed2380'
-    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
-    axios.get(apiUrl).then(showTemperature);
-    axios.get(apiUrl).then(showDesc);
+  function displayTemperature(response) {
+    let temperatureElement = document.querySelector("#temperature");
     let cityElement = document.querySelector("#current-city");
-    cityElement.innerHTML = city;
-} 
-function showDesc(response) {
-    console.log(response.data.weather[0].description);
-    let desc = response.data.weather[0].description;
-    let descElement = document.getElementById('desc');
-    descElement.innerHTML = `${desc}`;
-}
+    let descriptionElement = document.querySelector("#desc");
+    let humidityElement = document.querySelector("#humidity");
+    let windElement = document.querySelector("#wind");
+    let dateElement = document.querySelector("#date");
+    let iconElement = document.querySelector("#icon");
+  
+    celsiusTemperature = response.data.main.temp;
+    temperatureElement.innerHTML = Math.round(celsiusTemperature) + "&#8451";
+    cityElement.innerHTML = response.data.name;
+    descriptionElement.innerHTML = response.data.weather[0].description;
+    humidityElement.innerHTML = response.data.main.humidity + "%";
+    windElement.innerHTML = Math.round(response.data.wind.speed) + "km/h";
+    dateElement.innerHTML = formattedDate(response.data.dt * 1000);
+    iconElement.setAttribute(
+      "src",
+      `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`
+    );
+    iconElement.setAttribute("alt", response.data.weather[0].description);
+  }
 
-function showTemperature(response) {
-    console.log(response.data);
-    let temperature = Math.round(response.data.main.temp);
-    let temperatureElement = document.getElementById('temperature');
-    temperatureElement.innerHTML = `${temperature}&#8451;`;
-    let humidity = response.data.main.humidity;
-    let humidityElement = document.getElementById("humidity");
-    humidityElement.innerHTML = `${humidity}%`
-    let wind = Math.round(response.data.wind.speed);
-    let windElement = document.getElementById("wind");
-    windElement.innerHTML = `${wind} km/h`
-    let currentDateElement = document.getElementById("date");
-    currentDateElement.innerHTML = formattedDate(response.data.dt * 1000);
-    let iconElement = document.getElementById("icon");
-    iconElement.setAttribute("alt",response.data.weather[0].description);
-    iconElement.setAttribute("src",`http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`);
-}
+  function search(city) {
+    let apiKey = "5f472b7acba333cd8a035ea85a0d4d4c";
+    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+    axios.get(apiUrl).then(displayTemperature);
+  }
+  search("Kiev");
+  
+  function handleSubmit(event) {
+    event.preventDefault();
+    let cityInputElement = document.querySelector("#city-input");
+    search(cityInputElement.value);
+  }
 
-function displayCityName(response){
-    let nameOfTheCurrentCity = response.data.city;
-    let city = document.querySelector("#current-city");
-    city.innerHTML = `${nameOfTheCurrentCity}`
-
-}
+// function displayCityName(response){
+//     let nameOfTheCurrentCity = response.data.city;
+//     let city = document.querySelector("#current-city");
+//     city.innerHTML = `${nameOfTheCurrentCity}`
+// }
 
 function showPosition(position) {
     let lat = position.coords.latitude;
@@ -78,9 +77,8 @@ function showPosition(position) {
     let cityNameApiUrl = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}`
     let apiKey = '854e33f61b08418023d6baae98ed2380'
     let apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`
-    axios.get(apiUrl).then(showTemperature);
-    axios.get(apiUrl).then(showDesc);
-    axios.get(`${cityNameApiUrl}`).then(displayCityName);
+    axios.get(apiUrl).then(displayTemperature);
+    axios.get(`${cityNameApiUrl}`);
   }
   function getCurrentPosition() {
     navigator.geolocation.getCurrentPosition(showPosition);
@@ -90,6 +88,6 @@ function showPosition(position) {
   button.addEventListener("click", getCurrentPosition);
 
   let searchForm = document.querySelector("#search-form");
-  searchForm.addEventListener("submit", search);
+  searchForm.addEventListener("submit", handleSubmit);
 
  
