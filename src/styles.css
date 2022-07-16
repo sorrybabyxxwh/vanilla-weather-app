@@ -60,3 +60,6 @@ li{
 h1{
     margin-bottom: 0;
 }
+#desc{
+    text-transform: capitalize;
+}
