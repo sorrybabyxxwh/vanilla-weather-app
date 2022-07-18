@@ -30,7 +30,8 @@ function formattedDate(timestamp) {
     return `${daylist[day]} ${dateNum} ${monthList[month]}`;
   }
   function displayTemperature(response) {
-    let temperatureElement = document.querySelector("#temperature");
+    let temperatureElement = document.querySelector("#temperatureCelcium");
+    let temperatureElementF = document.querySelector("#temperatureFarenheit");
     let cityElement = document.querySelector("#current-city");
     let descriptionElement = document.querySelector("#desc");
     let humidityElement = document.querySelector("#humidity");
@@ -39,7 +40,9 @@ function formattedDate(timestamp) {
     let iconElement = document.querySelector("#icon");
   
     celsiusTemperature = response.data.main.temp;
+    farenheitTemperature = (celsiusTemperature * 9/5) + 32;
     temperatureElement.innerHTML = Math.round(celsiusTemperature) + "&#8451";
+    temperatureElementF.innerHTML = Math.round(farenheitTemperature) + "&#8457;";
     cityElement.innerHTML = response.data.name;
     descriptionElement.innerHTML = response.data.weather[0].description;
     humidityElement.innerHTML = response.data.main.humidity + "%";
@@ -65,11 +68,6 @@ function formattedDate(timestamp) {
     search(cityInputElement.value);
   }
 
-// function displayCityName(response){
-//     let nameOfTheCurrentCity = response.data.city;
-//     let city = document.querySelector("#current-city");
-//     city.innerHTML = `${nameOfTheCurrentCity}`
-// }
 
 function showPosition(position) {
     let lat = position.coords.latitude;
