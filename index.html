@@ -14,7 +14,6 @@
 </head>
 <body>
     <div class="weather-app">
-        
         <div class="main">
             <div class="row">
                 <form class="search-form" id="search-form">
@@ -34,7 +33,7 @@
                   />
                 </form>
             </div>
-            <duv class="row">
+            <div class="row">
               <div class="col-md-6">
                 <h1  id="current-city"></h1>
                 <ul>
@@ -46,22 +45,25 @@
                 <img src="http://openweathermap.org/img/wn/10d@2x.png" id="icon" class="float-left" />
               </div>
               <div class="col-md-4" id="temperature">
-                <span id="temperatureCelcium"></span> | <span id="temperatureFarenheit"></span>
+                <span id="temperatureCelcium"></span> 
             </div>
-            </duv>
-           
-            <div class="row">
-              <div class="col-md-9">
-              </div>
-              <div class="col-md-3 preps">
-                <ul class="float-left">
-                  <li>Humidity: <span id="humidity"></span></li>
-                  <li>Wind: <span id="wind"></span></li>
-                </ul>
-              </div>
+            </div>
+              <div class="row">
+                <div class="col-md-9">
+                </div>
+                <div class="col-md-3 preps">
+                  <ul class="float-left">
+                    <li>Humidity: <span id="humidity"></span></li>
+                    <li>Wind: <span id="wind"></span></li>
+                  </ul>
+                </div>
+                  <div class="weather-forecast" id="forecast">
                 
-                <button id="current-location-btn">Current Location</button>
-             </div>
+                  </div>
+                </div>
+              </div>
+            <button id="current-location-btn">Current Location</button>
+          </div>
         </div>
         <small class="cresdits">
             <a href="https://github.com/sorrybabyxxwh/vanilla-weather-app" target="_blank">Open-Source Code</a>

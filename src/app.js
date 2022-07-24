@@ -1,5 +1,5 @@
 let city = "Kiev";
-function formattedDate(timestamp) {
+function formattedDate(timestamp) { 
     let date = new Date(timestamp);
     let daylist = [
       "Sunday",
@@ -29,6 +29,59 @@ function formattedDate(timestamp) {
     let month = date.getMonth();
     return `${daylist[day]} ${dateNum} ${monthList[month]}`;
   }
+  
+  function formatDayForecast(timestamp){
+      let date = new Date(timestamp * 1000);
+      let day = date.getDay();
+      let days = [
+      "Sun",
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thur",
+      "Fri",
+      "Sat",
+    ];
+      return days[day];
+  }
+
+
+  function displayForecast(response) {
+    let forecast = response.data.daily;
+    let forecastElement = document.querySelector('#forecast');
+
+    let forecastHTML = `
+              <div class="container">
+                <div class="row g-2">`;
+    forecast.forEach(function(forecastDay, index){
+        if (index < 6) {
+               forecastHTML = forecastHTML + `
+                    <div class="col-2 mx-auto">
+                      <div class="p-3 block-day">
+                        <div class="weather-forecast-date">${formatDayForecast(forecastDay.dt)}</div>
+                        <img src="http://openweathermap.org/img/wn/${forecastDay.weather[0].icon}@2x.png" width="35px" />
+                        <span class="weather-forecast-temperature-max">${Math.round(forecastDay.temp.max)}°</span>
+                        <span class="weather-forecast-temperature-min">${Math.round(forecastDay.temp.min)}°</span>
+                      </div>
+                  </div>`;
+              }
+            });
+           
+    forecastHTML = forecastHTML + ` 
+                </div>
+              </div>`;
+ forecastElement.innerHTML = forecastHTML;
+
+  }
+
+  function getForecast(coords){
+    console.log(coords);
+    let apiKey = "5f472b7acba333cd8a035ea85a0d4d4c";
+    let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${coords.lat}&lon=${coords.lon}&appid=${apiKey}&units=metric`;
+    console.log(apiUrl);
+    axios.get(apiUrl).then(displayForecast);
+  }
+
   function displayTemperature(response) {
     let temperatureElement = document.querySelector("#temperatureCelcium");
     let temperatureElementF = document.querySelector("#temperatureFarenheit");
@@ -39,10 +92,10 @@ function formattedDate(timestamp) {
     let dateElement = document.querySelector("#date");
     let iconElement = document.querySelector("#icon");
   
+
+
     celsiusTemperature = response.data.main.temp;
-    farenheitTemperature = (celsiusTemperature * 9/5) + 32;
     temperatureElement.innerHTML = Math.round(celsiusTemperature) + "&#8451";
-    temperatureElementF.innerHTML = Math.round(farenheitTemperature) + "&#8457;";
     cityElement.innerHTML = response.data.name;
     descriptionElement.innerHTML = response.data.weather[0].description;
     humidityElement.innerHTML = response.data.main.humidity + "%";
@@ -53,6 +106,8 @@ function formattedDate(timestamp) {
       `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`
     );
     iconElement.setAttribute("alt", response.data.weather[0].description);
+
+    getForecast(response.data.coord)
   }
 
   function search(city) {
@@ -61,7 +116,7 @@ function formattedDate(timestamp) {
     axios.get(apiUrl).then(displayTemperature);
   }
   search("Kiev");
-  
+
   function handleSubmit(event) {
     event.preventDefault();
     let cityInputElement = document.querySelector("#city-input");
